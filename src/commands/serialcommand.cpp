@@ -16,22 +16,39 @@ int SerialCommand::GetSerialInput() {
   return 0;
 }
 
+int getIndex(char* string, char a) {
+  uint8_t i = 0;
+
+  while(*string) {
+    if(*string == a) {
+      return i;
+    }
+
+    i++;
+    *string++;
+  }
+}
+
 void SerialCommand::PrintSupportedCommands() {
   UART::Print("none!");
 }
 
-int getIndex(char a) {
-  return 0;
-}
+bool SerialCommand::ParseCommand(char* c) {
+  char a[10][64];
 
-bool substring(char* string, uint8_t start, uint8_t end) {
-  //char* buffer = (char*) malloc(strlen(string));
-  //strncpy(to, from+2, 5);
+  for(int b = 0; b < 5; b++) {
+    int index = getIndex(c, ' ');
 
-  return true;
-}
+    for(int i = 0; i < index; i++) {
+      a[b][i] = *(c + i);
+    }
 
-bool SerialCommand::ParseCommand(char* b) {
-  UART::Print(b);
+    c = c + index + 1;
+
+    a[b][index] = '\0';
+
+    UART::Print(a[b]);
+  }
+
   return false;
 }
