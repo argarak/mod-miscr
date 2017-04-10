@@ -1,6 +1,7 @@
 
 #include <avr/io.h>
 #include "mirpm.h"
+#include "src/commands/serialcommand.h"
 
 #define SINGULAR_MODULE true
 

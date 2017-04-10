@@ -28,9 +28,10 @@
 #include "miscr.h"
 
 void MISCR::setup() {
-  
+  UART::Init(); // Run just in case
+  UART::Print("miscr v0.2-dev ready\n");
 }
 
 void MISCR::loop() {
-
+  SerialCommand::GetSerialInput();
 }
