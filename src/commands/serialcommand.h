@@ -5,5 +5,5 @@ namespace SerialCommand {
   int GetSerialInput();
   void PrintSupportedCommands();
 
-  bool ParseCommand(char* b);
+  int ParseCommand(char* c);
 }

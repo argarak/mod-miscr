@@ -29,9 +29,16 @@
 
 void MISCR::setup() {
   UART::Init(); // Run just in case
+  _delay_ms(30);
+
   UART::Print("miscr v0.2-dev ready\n");
 }
 
 void MISCR::loop() {
   SerialCommand::GetSerialInput();
+
+  sX::Update();
+  sY::Update();
+  sZ::Update();
+  sE::Update();
 }
