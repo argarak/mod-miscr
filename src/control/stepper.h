@@ -1,5 +1,9 @@
 
+#ifndef _H_STEPPER
+#define _H_STEPPER
+
 #include "../../mirpm.h"
+#include "../../../../src/constants/datatypes.h"
 
 #define STEPPER_X_STEP   C,1
 #define STEPPER_X_DIR    C,2
@@ -37,3 +41,14 @@ public:
 
   Stepper(uint16_t nspmm, char type);
 };
+
+namespace Motor {
+  extern Stepper X;
+  extern Stepper Y;
+  extern Stepper Z;
+  extern Stepper E;
+
+  bool AreCurrentlyUpdated();
+}
+
+#endif

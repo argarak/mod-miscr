@@ -26,6 +26,7 @@
 /****************************************************************************/
 
 #include "miscr.h"
+//#include "src/control/stepper.h"
 
 void MISCR::setup() {
   UART::Init(); // Run just in case
@@ -37,8 +38,8 @@ void MISCR::setup() {
 void MISCR::loop() {
   SerialCommand::GetSerialInput();
 
-  sX::Update();
-  sY::Update();
-  sZ::Update();
-  sE::Update();
+  // Motor::X.Update();
+  // Motor::Y.Update();
+  // Motor::Z.Update();
+  // Motor::E.Update();
 }

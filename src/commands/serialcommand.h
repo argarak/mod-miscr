@@ -1,5 +1,9 @@
 
+#ifndef _H_SERIALCOMMAND
+#define _H_SERIALCOMMAND
+
 #include "../../mirpm.h"
+#include "../control/stepper.h"
 
 namespace SerialCommand {
   int GetSerialInput();
@@ -7,3 +11,5 @@ namespace SerialCommand {
 
   int ParseCommand(char* c);
 }
+
+#endif

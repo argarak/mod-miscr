@@ -1,30 +1,30 @@
 
 #include "serialcommand.h"
-#include "../control/stepper.h"
+#include "gcode/gcode.h"
+
+char* strcpy(char *strDest, const char *strSrc) {
+  char *temp = strDest;
+  while(*strDest++ = *strSrc++);
+  return temp;
+}
 
 int SerialCommand::GetSerialInput() {
-  if(sX.update ||
-     sY.update ||
-     sZ.update ||
-     sE.update)
+  if(Motor::AreCurrentlyUpdated())
     return 1;
-  while(1) {
-    char* b = UART::ReadString();
 
-    UART::Print(b);
+  char* b = UART::ReadString();
+  char c[256];
 
-    if(b && b[0]) {
-      SerialCommand::ParseCommand(b);
-      break;
-    }
+  strcpy(c, b);
 
-    free(b);
-  }
+  free(b);
+
+  SerialCommand::ParseCommand(c);
 
   return 0;
 }
 
-int getIndex(char* string) {
+int getIndex(const char* string) {
   uint8_t i = 0;
 
   while(*string) {
@@ -39,29 +39,40 @@ int getIndex(char* string) {
   return 0;
 }
 
+int getIndexes(const char* string) {
+  uint8_t i = 0;
+
+  while(*string) {
+    if(*string > 64 && *string < 91)
+      i++;
+
+    *string++;
+  }
+
+  return i;
+}
+
 void SerialCommand::PrintSupportedCommands() {
   UART::Print("none!");
 }
 
 int SerialCommand::ParseCommand(char* c) {
+  if(c && !c[0])
+    return 1;
+
   char a[10][64];
 
-  if(c && !c[0]) {
-    UART::Print("empty string");
-    return 1;
-  }
+  int indexes = getIndexes(c);
 
-  UART::Print(" >> ");
-  UART::Print(c);
-  UART::Print("\n\n");
+  int b = 0;
 
-  for(int b = 0; b < 5; b++) {
+  for(int b = 0; b < indexes; b++) {
     int index = getIndex(c);
+
+    uint8_t offset = 0;
 
     if(index == 0)
       index = UART::Strlen(c);
-
-    unsigned int offset = 0;
 
     for(int i = 0; i < index; i++) {
       if(*(c + i) != ' ')
@@ -70,32 +81,13 @@ int SerialCommand::ParseCommand(char* c) {
         offset++;
     }
 
+    a[b][index - offset] = '\0';
+
     c = c + index;
 
-    if(index != 0)
-      a[b][index - offset] = '\0';
-
-    char buf[20];
-
-    // Debugging!
-    UART::Print("index:: ");
-    UART::Print(itoa(index, buf, 10));
-    UART::Print("\n\n");
-
-    UART::Print("c:: ");
-    UART::Print(c);
-    UART::Print("\n\n");
-
-    UART::Print("offset:: ");
-    UART::Print(itoa(offset, buf, 10));
-    UART::Print("\n\n");
-
-    UART::Print("a[b]:: ");
     UART::Print(a[b]);
-    UART::Print("\n\n");
+    UART::Print("\n");
   }
 
-  free(c);
-
-  //GCode::Lookup(a);
+  GCode::Lookup(a);
 }

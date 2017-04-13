@@ -1,6 +1,7 @@
 
 #include "stepper.h"
 #include "feedrate.h"
+#include "../../mirpm.h"
 
 void Stepper::Init() {
   io_mode_output(&step.portd,   step.ddr);
@@ -118,7 +119,14 @@ Stepper::Stepper(uint16_t nspmm, char type) {
   Stepper::Init();
 }
 
-Stepper sX(80, 'X');
-Stepper sY(80, 'Y');
-Stepper sZ(80, 'Z');
-Stepper sE(80, 'E');
+Stepper Motor::X(80, 'X');
+Stepper Motor::Y(80, 'Y');
+Stepper Motor::Z(80, 'Z');
+Stepper Motor::E(80, 'E');
+
+bool Motor::AreCurrentlyUpdated() {
+  return (Motor::X.update ||
+          Motor::Y.update ||
+          Motor::Z.update ||
+          Motor::E.update);
+}

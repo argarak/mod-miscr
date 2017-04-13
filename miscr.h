@@ -3,7 +3,6 @@
 
 #include "mirpm.h"
 #include "src/commands/serialcommand.h"
-#include "src/control/stepper.h"
 
 #define SINGULAR_MODULE true
 
