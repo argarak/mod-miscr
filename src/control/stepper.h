@@ -5,21 +5,21 @@
 #include "../../mirpm.h"
 #include "../../../../src/constants/datatypes.h"
 
-#define STEPPER_X_STEP   C,1
-#define STEPPER_X_DIR    C,2
-#define STEPPER_X_ENABLE L,3
+#define STEPPER_X_STEP   F,0
+#define STEPPER_X_DIR    F,1
+#define STEPPER_X_ENABLE D,7
 
-#define STEPPER_Y_STEP   C,7
+#define STEPPER_Y_STEP   F,6
 #define STEPPER_Y_DIR    F,7
-#define STEPPER_Y_ENABLE C,3
+#define STEPPER_Y_ENABLE F,2
 
-#define STEPPER_Z_STEP   D,3
-#define STEPPER_Z_DIR    D,5
+#define STEPPER_Z_STEP   L,3
+#define STEPPER_Z_DIR    L,1
 #define STEPPER_Z_ENABLE K,0
 
-#define STEPPER_E_STEP   B,7
-#define STEPPER_E_DIR    G,3
-#define STEPPER_E_ENABLE B,5
+#define STEPPER_E_STEP   A,4
+#define STEPPER_E_DIR    A,6
+#define STEPPER_E_ENABLE A,2
 
 class Stepper {
 private:
@@ -30,14 +30,19 @@ public:
   uint16_t pos;
   uint16_t stepsPerMM;
 
+  float micro_delay;
+  double feedrate;
+
   bool update;
   uint32_t steps;
 
   void Init();
 
-  int Step(float mm);
+  int Step(double mm);
 
   int Update();
+
+  void ChangeDir(bool val);
 
   Stepper(uint16_t nspmm, char type);
 };

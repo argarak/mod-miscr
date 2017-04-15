@@ -33,13 +33,18 @@ void MISCR::setup() {
   _delay_ms(30);
 
   UART::Print("miscr v0.2-dev ready\n");
+
+  Motor::X.Init();
+  Motor::Y.Init();
+  Motor::Z.Init();
+  Motor::E.Init();
 }
 
 void MISCR::loop() {
-  SerialCommand::GetSerialInput();
+  Motor::X.Update();
+  Motor::Y.Update();
+  Motor::Z.Update();
+  Motor::E.Update();
 
-  // Motor::X.Update();
-  // Motor::Y.Update();
-  // Motor::Z.Update();
-  // Motor::E.Update();
+  SerialCommand::GetSerialInput();
 }

@@ -84,10 +84,7 @@ int SerialCommand::ParseCommand(char* c) {
     a[b][index - offset] = '\0';
 
     c = c + index;
-
-    UART::Print(a[b]);
-    UART::Print("\n");
   }
 
-  GCode::Lookup(a);
+  GCode::Lookup(a, indexes);
 }

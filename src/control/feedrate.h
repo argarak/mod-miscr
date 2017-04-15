@@ -1,11 +1,6 @@
 
-class Feedrate {
-public:
-  float micro_delay;
+namespace Feedrate {
+  int Calc(const char(*parameters)[64], int l);
 
-  void SetDelay(float md) {
-    micro_delay = md;
-  }
-};
-
-Feedrate feedrate;
+  void Set(int feedrate);
+}
