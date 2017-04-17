@@ -14,4 +14,6 @@ namespace GCode {
   double ConvertToDouble(const char* parameter);
 
   void Lookup(const char(*a)[64], uint8_t l);
+
+  extern bool absolute;
 }

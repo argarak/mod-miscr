@@ -28,6 +28,7 @@
 #include "miscr.h"
 #include "src/control/extruder.h"
 #include "src/commands/msg.h"
+#include "src/commands/gcode/methods/method.h"
 
 void MISCR::setup() {
   UART::Init(); // Run just in case
@@ -53,6 +54,11 @@ void MISCR::loop() {
   Motor::E.Update();
 
   Extruder::UpdateTemperature();
+
+  if(Command::IsComplete() == 0) {
+    Command::commandIssued = false;
+    Message::OK();
+  }
 
   SerialCommand::GetSerialInput();
 }

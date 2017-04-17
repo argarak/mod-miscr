@@ -27,7 +27,7 @@ private:
   gpio_t dir;
   gpio_t enable;
 public:
-  uint16_t pos;
+  double pos;
   uint16_t stepsPerMM;
 
   float micro_delay;

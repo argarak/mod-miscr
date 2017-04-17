@@ -3,13 +3,14 @@
 #include "feedrate.h"
 #include "../../mirpm.h"
 #include "../commands/msg.h"
+#include "../commands/gcode/gcode.h"
+
+#include <math.h>
 
 void Stepper::Init() {
   io_set_high(*step.portd,   step.pin);
   io_set_high(*dir.portd,    dir.pin);
   io_set_high(*enable.portd, enable.pin);
-
-  //io_set_low(*enable.port, enable.pin);
 
   micro_delay = 15;
 }
@@ -21,23 +22,42 @@ void Stepper::ChangeDir(bool val) {
     io_set_low(*dir.port, dir.pin);
 }
 
-int Stepper::Step(double mm) {
-  if(mm == 0)
-    return 0;
+int Stepper::Step(const double mm) {
+  if(!GCode::absolute) {
+    if(mm == 0)
+      return 1;
 
-  if(mm < 0) {
-    ChangeDir(true);
-    steps = -mm * stepsPerMM;
+    if(mm < 0) {
+      ChangeDir(true);
+      steps = ceil(-mm * stepsPerMM);
+    } else {
+      ChangeDir(false);
+      steps = ceil(mm * stepsPerMM);
+    }
+
+    update = true;
+
+    pos += mm;
   } else {
-    ChangeDir(false);
-    steps = mm * stepsPerMM;
+    if(mm == pos)
+      return 1;
+
+    double diff = mm - pos;
+
+    if(diff < 0) {
+      ChangeDir(true);
+      steps = ceil(-diff * stepsPerMM);
+    } else {
+      ChangeDir(false);
+      steps = ceil(diff * stepsPerMM);
+    }
+
+    update = true;
+
+    pos = mm;
   }
 
-  update = true;
-
-  Message::OK();
-
-  pos += mm;
+  return 0;
 }
 
 int Stepper::Update() {
@@ -65,6 +85,8 @@ int Stepper::Update() {
 
 Stepper::Stepper(uint16_t nspmm, char type) {
   stepsPerMM = nspmm;
+
+  pos = 0;
 
   // Prepare for a rushed mess!
   switch(type) {

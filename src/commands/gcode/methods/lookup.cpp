@@ -4,6 +4,8 @@
 #include "method.h"
 #include "../../msg.h"
 
+bool GCode::absolute = false;
+
 int GCode::ExecuteGCommand(uint8_t code, const char(*parameters)[64],
                             uint8_t l) {
   switch(code) {
@@ -13,11 +15,21 @@ int GCode::ExecuteGCommand(uint8_t code, const char(*parameters)[64],
   case 1:
     Command::GCodeG0(code, parameters, l);
     break;
+  case 28:
+    Command::GCodeG28(code, parameters, l);
+    break;
   case 91:
+    // Relative positioning
+    GCode::absolute = false;
     Message::OK();
     break;
   case 90:
+    // Absolute positioning
+    GCode::absolute = true;
     Message::OK();
+    break;
+  case 92:
+    Command::GCodeG92(code, parameters, l);
     break;
   }
 
@@ -29,8 +41,10 @@ int GCode::ExecuteMCommand(uint8_t code, const char(*parameters)[64],
   switch(code) {
   case 110:
     Message::OK();
+    break;
   case 114:
     Message::CurrentPosition();
+    break;
   }
   return 0;
 }
