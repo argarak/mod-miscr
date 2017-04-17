@@ -16,7 +16,6 @@ int SerialCommand::GetSerialInput() {
   char c[256];
 
   strcpy(c, b);
-
   free(b);
 
   SerialCommand::ParseCommand(c);

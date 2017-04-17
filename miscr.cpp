@@ -26,7 +26,8 @@
 /****************************************************************************/
 
 #include "miscr.h"
-//#include "src/control/stepper.h"
+#include "src/control/extruder.h"
+#include "src/commands/msg.h"
 
 void MISCR::setup() {
   UART::Init(); // Run just in case
@@ -34,10 +35,15 @@ void MISCR::setup() {
 
   UART::Print("miscr v0.2-dev ready\n");
 
+  ATDC::Init(13);
+  Extruder::Init();
+
   Motor::X.Init();
   Motor::Y.Init();
   Motor::Z.Init();
   Motor::E.Init();
+
+  Message::OK();
 }
 
 void MISCR::loop() {
@@ -45,6 +51,8 @@ void MISCR::loop() {
   Motor::Y.Update();
   Motor::Z.Update();
   Motor::E.Update();
+
+  Extruder::UpdateTemperature();
 
   SerialCommand::GetSerialInput();
 }

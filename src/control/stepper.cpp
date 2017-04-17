@@ -2,6 +2,7 @@
 #include "stepper.h"
 #include "feedrate.h"
 #include "../../mirpm.h"
+#include "../commands/msg.h"
 
 void Stepper::Init() {
   io_set_high(*step.portd,   step.pin);
@@ -21,10 +22,8 @@ void Stepper::ChangeDir(bool val) {
 }
 
 int Stepper::Step(double mm) {
-  //if(mm == 0)
-  //  return 0;
-
-  UART::Print("step was called\n");
+  if(mm == 0)
+    return 0;
 
   if(mm < 0) {
     ChangeDir(true);
@@ -35,6 +34,8 @@ int Stepper::Step(double mm) {
   }
 
   update = true;
+
+  Message::OK();
 
   pos += mm;
 }

@@ -2,6 +2,7 @@
 #include "../gcode.h"
 #include "../../../../mirpm.h"
 #include "method.h"
+#include "../../msg.h"
 
 int GCode::ExecuteGCommand(uint8_t code, const char(*parameters)[64],
                             uint8_t l) {
@@ -10,10 +11,14 @@ int GCode::ExecuteGCommand(uint8_t code, const char(*parameters)[64],
     Command::GCodeG0(code, parameters, l);
     break;
   case 1:
-    Command::GCodeG1(code, parameters, l);
+    Command::GCodeG0(code, parameters, l);
     break;
-  default:
-    UART::Print("resend\n");
+  case 91:
+    Message::OK();
+    break;
+  case 90:
+    Message::OK();
+    break;
   }
 
   return 0;
@@ -21,6 +26,12 @@ int GCode::ExecuteGCommand(uint8_t code, const char(*parameters)[64],
 
 int GCode::ExecuteMCommand(uint8_t code, const char(*parameters)[64],
                             uint8_t l) {
+  switch(code) {
+  case 110:
+    Message::OK();
+  case 114:
+    Message::CurrentPosition();
+  }
   return 0;
 }
 
@@ -33,12 +44,18 @@ double GCode::ConvertToDouble(const char* parameter) {
 }
 
 void GCode::Lookup(const char(*a)[64], uint8_t l) {
-  char z = a[0][0];
+  uint8_t commandIndex = 0;
+  char z = a[commandIndex][0];
+
+  if(z == 'N') {
+    commandIndex++;
+    z = a[commandIndex][0];
+  }
 
   if(z == 'G')
-    GCode::ExecuteGCommand(GCode::ConvertToInt(a[0]), a, l);
+    GCode::ExecuteGCommand(GCode::ConvertToInt(a[commandIndex]), a, l);
   else if(z == 'M')
-    GCode::ExecuteMCommand(GCode::ConvertToInt(a[0]), a, l);
+    GCode::ExecuteMCommand(GCode::ConvertToInt(a[commandIndex]), a, l);
   else
     UART::Print("resend\n");
 }
