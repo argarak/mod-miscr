@@ -48,6 +48,8 @@ void MISCR::setup() {
   Display::Init();
 
   Message::OK();
+
+  io_set_low(DDR(C,2), PIN(C,2));
 }
 
 void MISCR::loop() {
