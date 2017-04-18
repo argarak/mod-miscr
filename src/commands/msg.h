@@ -3,5 +3,6 @@
 
 namespace Message {
   void CurrentPosition();
+  void Temperature();
   void OK();
 }

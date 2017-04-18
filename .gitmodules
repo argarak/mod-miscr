@@ -1,0 +1,3 @@
+[submodule "lib/u8glib-avr"]
+	path = lib/u8glib-avr
+	url = git@github.com:mirpm/u8glib-avr.git

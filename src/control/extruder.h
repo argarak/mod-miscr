@@ -28,6 +28,8 @@ namespace Extruder {
 
   uint16_t GetTemperature();
   void UpdateTemperature();
+  void FanOn();
+  void FanOff();
 }
 
 #endif

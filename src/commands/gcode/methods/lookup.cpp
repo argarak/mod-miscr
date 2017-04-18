@@ -3,6 +3,7 @@
 #include "../../../../mirpm.h"
 #include "method.h"
 #include "../../msg.h"
+#include "../../../control/extruder.h"
 
 bool GCode::absolute = false;
 
@@ -44,6 +45,18 @@ int GCode::ExecuteMCommand(uint8_t code, const char(*parameters)[64],
     break;
   case 114:
     Message::CurrentPosition();
+    break;
+  case 105:
+    Message::Temperature();
+    break;
+  case 104:
+    Command::GCodeM104(code, parameters, l);
+    break;
+  case 106:
+    Command::GCodeM106(code, parameters, l);
+    break;
+  case 107:
+    Extruder::FanOff();
     break;
   }
   return 0;

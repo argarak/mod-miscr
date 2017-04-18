@@ -29,6 +29,7 @@
 #include "src/control/extruder.h"
 #include "src/commands/msg.h"
 #include "src/commands/gcode/methods/method.h"
+#include "src/display.h"
 
 void MISCR::setup() {
   UART::Init(); // Run just in case
@@ -43,6 +44,8 @@ void MISCR::setup() {
   Motor::Y.Init();
   Motor::Z.Init();
   Motor::E.Init();
+
+  Display::Init();
 
   Message::OK();
 }

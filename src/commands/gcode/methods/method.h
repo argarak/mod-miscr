@@ -15,4 +15,6 @@ namespace Command {
   int GCodeG1(uint8_t code, const char(*parameters)[64], uint8_t l);
   int GCodeG28(uint8_t code, const char(*parameters)[64], uint8_t l);
   int GCodeG92(uint8_t code, const char(*parameters)[64], uint8_t l);
+  int GCodeM104(uint8_t code, const char(*parameters)[64], uint8_t l);
+  int GCodeM106(uint8_t code, const char(*parameters)[64], uint8_t l);
 }

@@ -2,7 +2,7 @@
 #include "extruder.h"
 
 temp_t Extruder::temperature;
-uint16_t Extruder::dtemp;
+uint16_t Extruder::dtemp = 0;
 uint8_t Extruder::dcycle = 128;
 
 short temptable[NUMTEMPS][2] = {
@@ -29,13 +29,13 @@ short temptable[NUMTEMPS][2] = {
 };
 
 void Extruder::Init() {
-  //  io_set_high(DDR(EXTRUDER_PIN), PIN(EXTRUDER_PIN));
+  io_set_high(DDR(EXTRUDER_PIN), PIN(EXTRUDER_PIN));
   io_set_high(DDR(EXTRUDER_FAN_PIN), PIN(EXTRUDER_FAN_PIN));
 
   TCCR2A = _BV(COM2A0) | _BV(COM2B1) | _BV(WGM20);
   TCCR2B = _BV(WGM22) | _BV(CS22);
 
-  OCR2A = 10;
+  OCR2A = 128;
 
   Extruder::dcycle = 128;
 
@@ -77,4 +77,12 @@ uint16_t Extruder::GetTemperature() {
   }
 
   return temptable[index][1];
+}
+
+void Extruder::FanOn() {
+  io_set_high(PORT(EXTRUDER_FAN_PIN), PIN(EXTRUDER_FAN_PIN));
+}
+
+void Extruder::FanOff() {
+  io_set_low(PORT(EXTRUDER_FAN_PIN), PIN(EXTRUDER_FAN_PIN));
 }
